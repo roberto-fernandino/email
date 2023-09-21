@@ -119,7 +119,6 @@ def send_custom_emails_view(request):
     if request.method == "POST":
         form = CustomEmailForm(request.POST, request.FILES)
         if form.is_valid():
-            print(form.cleaned_data)
             try:
                 email = request.POST.get("email")
                 subject = form.cleaned_data['subject']
@@ -140,8 +139,6 @@ def send_custom_emails_view(request):
             except Exception as e:
                 traceback.print_exc()
                 print(f'Erro email custom: {e}')
-        else:
-            print(f"form invalido: {form.errors}")
 
                         
                 

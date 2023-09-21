@@ -25,7 +25,6 @@ def send_tracked_email(destinatario:Destinatario, subject:str, email_template_pa
         'tracking_url': str(environ.get("NGROK_URL")) + f'/mail/track-email/{email.id}',
         'dest_name': destinatario.nome
     }
-    print(f" tracking url: {context['tracking_url']}")
     try:
         with open (email_template_path, 'r') as file:
             template_content = file.read()
@@ -56,7 +55,6 @@ def send_tracked_email(destinatario:Destinatario, subject:str, email_template_pa
         result = mailjet.send.create(data=data)
         result_json, status_code = result.json(), result.status_code
         status = result_json["Messages"][0]["Status"]
-        print(f"Result: {result_json}, {status_code}")
         if status == "success":
             email.sent = True
             email.save()
@@ -127,7 +125,6 @@ def send_custom_tracked_email(destinatario:Destinatario, subject:str, header:str
         result = mailjet.send.create(data=data)
         result_json, status_code = result.json(), result.status_code
         status = result_json["Messages"][0]["Status"]
-        print(f"Result: {result_json}, {status_code}")
         if status == "success":
             email.sent = True
             email.save()
@@ -135,3 +132,5 @@ def send_custom_tracked_email(destinatario:Destinatario, subject:str, header:str
     except Exception as e:
         traceback.print_exc()
         return print(f"Exception sending: {e}")
+    
+
