@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+  <style>
+    .email-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+      background-color: beige;
+    }
+    .header h2 {
+      font-size: 25px;
+      font-weight: 500;
+      color: rgba(90, 255, 255, 0.317);
+    }
+    .content span {
+      font-size: 15px;
+      color: darkgray;
+    }
+  </style>
+  <body>
+    {% load static %}
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <div
+      class="email-container"
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        background-color: rgb(225, 225, 225);
+      "
+    >
+      <div style="text-align: center; width: 100%">
+        <div class="header">
+          <h2 style="font-size: 60px; font-weight: 500; color: rgb(0, 0, 0)">
+            {{ header }}
+          </h2>
+        </div>
+        <div class="content">
+          <span style="font-size: 30px; color: rgb(0, 123, 255)">
+            {{ texto }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+FROM python:3.11.4-alpine
+
+
+LABEL mantainer="romfernandino@gmail.com"
+
+# Outputs do Python são enviados diretamente para o terminal,
+# em vez de serem armazenados em um buffer para envio posterior ao terminal.
+ENV PYTHONUNBUFFERED=1
+
+
+COPY app /app
+COPY scripts /scripts
+
+WORKDIR /app
+
+# Porta exposta
+EXPOSE 8000
+
+RUN apk update && apk add --no-cache gcc python3-dev libpq-dev musl-dev postgresql-dev netcat-openbsd
+
+RUN ls -al && \
+    python3 -m venv /venv && \
+    /venv/bin/pip install --upgrade pip && \
+    /venv/bin/pip install -r /app/requirements.txt && \
+    adduser --disabled-password --no-create-home admin && \
+    mkdir -p /data/static /data/media /data/static/emails &&\
+    chown -R admin:admin /data/static /data/media/ /data/static/emails /venv /app /scripts && \
+    chmod -R 755 /data/media /data/static/emails/ /data/static /app && \
+    chmod +x /scripts/commands.sh
+
+ENV PATH="/scripts:/venv/bin:$PATH"
+
+USER admin
+
+CMD ["commands.sh"]

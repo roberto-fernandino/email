@@ -1,0 +1,54 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=email
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - PGDATA=/var/lib/postgres/data
+    
+    volumes:
+      - ./master:/var/lib/postgres/data
+      - type: tmpfs
+        target: /dev/shm
+
+    container_name: postgres_db
+
+  ngrok:
+    build:
+      context: .
+      dockerfile: Dockerfile.ngrok
+    ports:
+      - "4040:4040"
+    container_name: ngrok
+    depends_on:
+      - app
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.django
+    volumes:
+      - ./app:/app
+      - ./scripts:/scripts
+      - emails_data:/data/static/emails
+    
+    ports:
+      - 8000:8000
+    
+    image: app:django
+    
+    container_name: django_app_email
+    
+    depends_on:
+      - db
+    
+    env_file:
+     - .env
+
+volumes:
+  emails_data:
