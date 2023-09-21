@@ -6,6 +6,17 @@ import traceback
 from django.conf import settings
 
 def send_tracked_email(destinatario:Destinatario, subject:str, email_template_path:str):
+    """
+    Envia um e-mail rastreado para um destinatário específico usando a API Mailjet.
+
+    Parameters:
+    - destinatario (Destinatario): O objeto Destinatario para quem o e-mail será enviado.
+    - subject (str): O assunto do e-mail.
+    - email_template_path (str): O caminho para o arquivo de template do e-mail.
+
+    Returns:
+    tuple: Um tuple contendo o código de status e o JSON de resposta da API.
+    """
     email = EmailTracked.objects.create(dest=destinatario)
     secret = getenv("MAIL_PRIVATE")
     public = getenv("MAIL_PUBLIC")
@@ -56,6 +67,20 @@ def send_tracked_email(destinatario:Destinatario, subject:str, email_template_pa
 
 
 def send_custom_tracked_email(destinatario:Destinatario, subject:str, header:str, texto:str, img_base64:str, email_template_path:str):
+    """
+    Envia um e-mail customizado e rastreado para um destinatário específico usando a API Mailjet.
+
+    Parameters:
+    - destinatario (Destinatario): O objeto Destinatario para quem o e-mail será enviado.
+    - subject (str): O assunto do e-mail.
+    - header (str): O cabeçalho para o corpo do e-mail.
+    - texto (str): O texto principal do e-mail.
+    - img_base64 (str): A imagem a ser anexada no e-mail, codificada em base64.
+    - email_template_path (str): O caminho para o arquivo de template do e-mail.
+
+    Returns:
+    tuple: Um tuple contendo o código de status e o JSON de resposta da API.
+    """
     email = EmailTracked.objects.create(dest=destinatario)
     secret = getenv("MAIL_PRIVATE")
     public = getenv("MAIL_PUBLIC")

@@ -14,17 +14,24 @@ import traceback
 BASE_DIR = settings.BASE_DIR
 
 def track_email_view(request, email_id):
-    print("Url acessada.")
+    """
+    obs. Só funciona em contas com alto grau de confiança em em provedores sérios como Gmail, Outlook.
+    ## Rastreia a abertura de um e-mail por meio da inserção de um pixel transparente na mensagem de e-mail.
+    Quando o e-mail é aberto, o pixel é carregado, acionando este endpoint que marca o e-mail como 'aberto'.
+
+    Parameters:
+    - request (HttpRequest): Objeto de solicitação HTTP do Django.
+    - email_id (int): ID único do e-mail rastreado.
+
+    Returns:
+    HttpResponse: Uma imagem GIF transparente de 1x1 pixel.
+    """
     try:
         email = EmailTracked.objects.get(pk=email_id)
-        print(f"Email com ID {email_id} encontrado!")
         if not email.opened:
-            print(f"marcando email como lido.")
             email.opened_at = timezone.now()
             email.opened = True
             email.save()
-        else:
-            print(f"Email ja estava aberto")
             
     except EmailTracked.DoesNotExist:
         pass
@@ -40,6 +47,17 @@ class EmailSubjectForm(forms.Form):
     }))
 
 def send_emails_view(request):
+    """
+    ## Envia um e-mail rastreado para um destinatário específico usando a API Mailjet.
+
+    Parameters:
+    - destinatario (Destinatario): O objeto Destinatario para quem o e-mail será enviado.
+    - subject (str): O assunto do e-mail.
+    - email_template_path (str): O caminho para o arquivo de template do e-mail.
+
+    ## Returns:
+    tuple: Um tuple contendo o código de status e o JSON de resposta da API.
+    """
     selected_ids = request.session.get("selected_dest_ids")
 
     if not selected_ids:
@@ -79,6 +97,20 @@ class CustomEmailForm(forms.Form):
     }))
 
 def send_custom_emails_view(request):
+    """
+    Envia um e-mail customizado e rastreado para um destinatário específico usando a API Mailjet.
+
+    Parameters:
+    - destinatario (Destinatario): O objeto Destinatario para quem o e-mail será enviado.
+    - subject (str): O assunto do e-mail.
+    - header (str): O cabeçalho para o corpo do e-mail.
+    - texto (str): O texto principal do e-mail.
+    - img_base64 (str): A imagem a ser anexada no e-mail, codificada em base64.
+    - email_template_path (str): O caminho para o arquivo de template do e-mail.
+
+    Returns:
+    tuple: Um tuple contendo o código de status e o JSON de resposta da API.
+    """
     selected_ids = request.session.get("selected_dest_ids")
 
     if not selected_ids:
