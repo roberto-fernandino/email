@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        .chart{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart">
+        <h1>Emails Relatorio</h1>
+        <canvas id="emailsEnviados"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        const emails_sent = "{{emails_sent}}";
+        const emails_not_sent = "{{emails_not_sent}}";
+        const dataEmail = [parseInt(emails_sent), parseInt(emails_not_sent)]
+        const data = {
+            labels: [
+                'Enviados',
+                'Nao enviados',
+            ],
+            datasets: [{
+                label: "Emails Enviados",
+                data: dataEmail,
+                backgroundColor: ["rgb(28, 148, 64)", "rgb(184, 35, 35)"],
+                hoverOffset:4,
+                borderWidth:1,
+            }]
+        }
+        const config = {
+            type: 'pie',
+            data: data,
+        } 
+        const ctx = document.getElementById('emailsEnviados');
+        const myPieChart = new Chart(ctx, config);
+    </script>
+</body>
+</html>

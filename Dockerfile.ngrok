@@ -1,0 +1,12 @@
+FROM ubuntu:latest
+
+COPY ngrok /usr/bin/ngrok
+
+COPY scripts/start.sh /usr/local/bin/start.sh
+
+RUN chmod +x /usr/bin/ngrok /usr/local/bin/start.sh && \
+    ngrok authtoken 2Sw9npo5e0hIZT6WSvGqpV7TmVO_3SAP8uFUziSnyDQ1FhXDY && \
+    apt update -y && \
+    apt install curl jq -y
+
+CMD start.sh
