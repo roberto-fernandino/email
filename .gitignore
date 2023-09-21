@@ -1,3 +1,4 @@
 master
 .env    
 /__pycache__/
+*.pyc
