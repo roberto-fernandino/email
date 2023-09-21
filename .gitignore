@@ -1,1 +1,3 @@
 master
+.env    
+__pycache__
