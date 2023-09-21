@@ -1,7 +1,6 @@
 # urls.py
 from django.urls import path
-from .views import track_email_view, send_emails_view, send_custom_emails_view
-
+from .views import track_email_view, send_emails_view, send_custom_emails_view, create_csv_file
 
 app_name = "mail"
 
@@ -10,5 +9,6 @@ urlpatterns = [
     path("track-email/<int:email_id>", track_email_view, name="track-email-view"),
     path("send_emails", send_emails_view, name="send-email-view"),
     path("custom-send_emails", send_custom_emails_view, name="send-custom-email-view"),
+    path('csv', create_csv_file, name='gerar-csv'),
 ]
 

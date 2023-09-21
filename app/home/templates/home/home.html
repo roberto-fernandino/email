@@ -1,48 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        .chart{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 500px;
-        }
+      .chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 500px;
+      }
+      #container{
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
     </style>
-</head>
-<body>
-    <div class="chart">
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <div id="container">
+      <div class="chart">
         <h1>Emails Relatorio</h1>
         <canvas id="emailsEnviados"></canvas>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <script>
+        <button class="btn bnt-info">
+            <a
+              href="{% url 'admin:mail_destinatario_changelist' %}"
+              style="text-decoration: none; margin-top: 20px;"
+              >Painel de controle.</a
+            >
+          </button>
+      </div>
+      <div>
+        
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <script>
         const emails_sent = "{{emails_sent}}";
         const emails_not_sent = "{{emails_not_sent}}";
-        const dataEmail = [parseInt(emails_sent), parseInt(emails_not_sent)]
+        const dataEmail = [parseInt(emails_sent), parseInt(emails_not_sent)];
         const data = {
-            labels: [
-                'Enviados',
-                'Nao enviados',
-            ],
-            datasets: [{
-                label: "Emails Enviados",
-                data: dataEmail,
-                backgroundColor: ["rgb(28, 148, 64)", "rgb(184, 35, 35)"],
-                hoverOffset:4,
-                borderWidth:1,
-            }]
-        }
+          labels: ["Enviados", "Nao enviados"],
+          datasets: [
+            {
+              label: "Emails Enviados",
+              data: dataEmail,
+              backgroundColor: ["rgb(28, 148, 64)", "rgb(184, 35, 35)"],
+              hoverOffset: 4,
+              borderWidth: 1,
+            },
+          ],
+        };
         const config = {
-            type: 'pie',
-            data: data,
-        } 
-        const ctx = document.getElementById('emailsEnviados');
+          type: "pie",
+          data: data,
+        };
+        const ctx = document.getElementById("emailsEnviados");
         const myPieChart = new Chart(ctx, config);
-    </script>
-</body>
+      </script>
+    </div>
+  </body>
 </html>

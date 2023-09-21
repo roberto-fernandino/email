@@ -22,8 +22,16 @@ class DestinatarioAdmin(admin.ModelAdmin):
         (None, {"fields": ['email', "nome", "sobrenome"]}),
     )
 
+
+@admin.action(description='Gerar csv file com emails selecionados')
+def gera_csv_file(modeladmin, request, queryset):
+    request.session['selected_emails_ids'] = list(queryset.values_list('id', flat=True))
+    return redirect("mail:gerar-csv")
+
+
 @admin.register(EmailTracked)
 class EmailAdmin(admin.ModelAdmin):
+    actions =[gera_csv_file]
     list_display = ['id','dest', 'opened', 'sent_try', 'sent']
     list_display_links = ['dest']
 

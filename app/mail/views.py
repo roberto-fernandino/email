@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
-from django.core.mail import EmailMessage, get_connection
 from .models import EmailTracked, Destinatario
 from django.utils import timezone
 from django.http import HttpResponse
 from django import forms
 from .funcs import send_tracked_email, send_custom_tracked_email
-from os import listdir, path, makedirs
+from os import listdir, path 
 from django.conf import settings
 import base64
 import traceback
+import csv
 # Create your views here.
 
 BASE_DIR = settings.BASE_DIR
@@ -152,3 +152,56 @@ def send_custom_emails_view(request):
         "form": form
     }
     return render(request, "mail/send_email_form.html", context)
+
+
+def create_csv_file(request):
+    '''
+    # Função: `create_csv_file`
+
+    ## Descrição
+    A função `create_csv_file` é uma view do Django que gera um arquivo CSV contendo detalhes dos emails rastreados.
+    O arquivo CSV é então enviado ao cliente como anexo.
+
+    ## Parâmetros
+    - **request**: O objeto de solicitação HTTP do cliente. Esta função espera uma variável de sessão `'selected_emails_ids'`
+      a ser definido. Esta variável de sessão deve conter uma lista de chaves primárias (`ids`) dos emails que serão incluídos no arquivo CSV.
+
+    ## Saída
+    - Um objeto de resposta HTTP que contém o arquivo CSV como anexo. O arquivo CSV inclui as seguintes colunas:
+        - Identificação do email
+        - E-mail do destinatário
+        - Destino Nome
+        - Tentativa de envio
+        - Enviado
+        -Aberto
+        - Dados de abertura
+
+    ## Exemplo de uso
+    ```python
+    # Suponha que definimos request.session['selected_emails_ids'] = [1, 2, 3]
+    resposta = create_csv_file(solicitação)
+    ```
+
+    ## Observação
+    - Certifique-se de que a variável de sessão `'selected_emails_ids'` esteja definida antes de chamar esta função.
+    '''
+
+    ids = request.session.get('selected_emails_ids')
+    emails = EmailTracked.objects.filter(pk__in=ids)
+    
+    resposta = HttpResponse(content_type='texto/csv')
+    resposta['Content-Disposition'] = "anexo; nome do arquivo='emails.csv'"
+    
+    escritor = csv.writer(resposta)
+    escritor.writerow(['Email ID', 'Destinatário Email', 'Destinatário Nome', 'Tentativa de envio', 'Enviado', 'Aberto', 'Dados de abertura'])
+    ids = request.session.get('selected_emails_ids')
+    emails = EmailTracked.objects.filter(pk__in=ids)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = "attachment; filename='emails.csv'"
+    writer = csv.writer(response)
+    writer.writerow(['Email ID', 'Destinatario Email', 'Destinatario Nome',  'Tentativa de envio', 'Enviado', 'Aberto', 'Data de abertura']) 
+
+    for email in emails:
+        writer.writerow([email.id, email.dest.email, email.dest.nome, email.sent_try, email.sent, email.opened, email.opened_at])
+    return response
+    
