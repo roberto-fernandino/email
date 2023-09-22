@@ -54,3 +54,5 @@ python manage.py createsuperuser
 ## Dicas
 
 - Fique atento aos logs do docker.
+## Observações 
+- A "Feature" de detectar quando um e-mail foi aberto não é possível com um e-mail comum, como o que está sendo utilizado no projeto. Para habilitar esse recurso com eficácia, é necessário configurar registros SPF, DKIM e DMARC para o domínio de e-mail utilizado. Essas configurações ajudam a verificar a legitimidade dos e-mails enviados e são especialmente importantes se você deseja manter uma boa reputação do domínio. No entanto, vale mencionar que a funcionalidade de rastreamento de abertura de e-mails já está ativa no sistema. Cada e-mail enviado contém um pixel de 1x1 para esse propósito. Quando o e-mail é aberto em um navegador, esse pixel em tese aciona uma requisição GET, registrando assim a abertura do e-mail porêm com o email registrado isso não acontece. Por razões de teste, caso queira testar o rastreamento ache o link de cada email com um simples print no link presente na função de enviar email e abra num navegador, você verá que o email será marcado como aberto.
