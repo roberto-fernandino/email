@@ -32,4 +32,4 @@ ENV PATH="/scripts:/venv/bin:$PATH"
 
 USER admin
 
-CMD ["commands.sh"]
+CMD ["sh", "/scripts/commands.sh"]
